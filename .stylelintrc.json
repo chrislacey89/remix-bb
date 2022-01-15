@@ -1,0 +1,9 @@
+{
+  "extends": ["stylelint-config-standard", "stylelint-config-rational-order"],
+  "plugins": ["stylelint-color-format"],
+  "rules": {
+    "color-format/format": {
+      "format": "hsl"
+    }
+  }
+}
