@@ -1,5 +1,12 @@
-import type { MetaFunction } from 'remix'
+import type { MetaFunction, LinksFunction } from 'remix'
 import { Button } from '@mantine/core'
+import houses from '../data/houses'
+import House from '../components/House'
+import indexCSS from '../styles/index.css'
+export const links: LinksFunction = () => {
+  return [{ rel: 'stylesheet', href: indexCSS }]
+}
+
 export const meta: MetaFunction = () => {
   return {
     title: 'Air B&B',
@@ -12,10 +19,16 @@ export default function Index() {
     <div className="container">
       <div className="content">
         <h1>Hello world</h1>
-        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ml-4 mt-4">
-          Button
-        </button>
       </div>
+      <h2>Places to stay</h2>
+
+      <div className="houses">
+        {houses.map((house, index) => {
+          //...
+          return <House key={index} {...house} />
+        })}
+      </div>
+
       <Button>hello</Button>
     </div>
   )
