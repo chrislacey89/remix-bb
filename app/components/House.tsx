@@ -1,18 +1,23 @@
+import { Link } from 'remix'
+
 interface HouseProps {
+  id: string
   picture: string
   type: string
   town: string
   title: string
 }
 
-export default function House({ picture, type, town, title }: HouseProps) {
+export default function House({ id, picture, type, town, title }: HouseProps) {
   return (
     <div>
-      <img src={picture} width="100%" alt="House picture" />
-      <p>
-        {type} - {town}
-      </p>
-      <p>{title}</p>
+      <Link to={`/houses/${id}`}>
+        <img src={picture} width="100%" alt="House picture" />
+        <p>
+          {type} - {town}
+        </p>
+        <p>{title}</p>
+      </Link>
     </div>
   )
 }
