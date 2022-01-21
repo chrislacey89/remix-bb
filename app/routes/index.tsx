@@ -1,9 +1,8 @@
 import type { MetaFunction, LinksFunction } from 'remix'
-import { Button, AppShell, Navbar } from '@mantine/core'
+import { Button, AppShell } from '@mantine/core'
 import houses from '../data/houses'
 import House from '../components/House'
 import indexCSS from '../styles/index.css'
-import HeaderCSS from '../styles/header.css'
 
 import Header from '~/components/Header'
 export const links: LinksFunction = () => {
