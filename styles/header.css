@@ -1,0 +1,5 @@
+.nav-container {
+  height: 50px;
+  background-color: green !important;
+  border-bottom: 1px solid hsl(0deg 0% 93%);
+}

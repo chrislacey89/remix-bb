@@ -1,10 +1,16 @@
 import type { MetaFunction, LinksFunction } from 'remix'
-import { Button } from '@mantine/core'
+import { Button, AppShell, Navbar } from '@mantine/core'
 import houses from '../data/houses'
 import House from '../components/House'
 import indexCSS from '../styles/index.css'
+import HeaderCSS from '../styles/header.css'
+
+import Header from '~/components/Header'
 export const links: LinksFunction = () => {
-  return [{ rel: 'stylesheet', href: indexCSS }]
+  return [
+    { rel: 'stylesheet', href: indexCSS },
+    // { rel: 'stylesheet', href: HeaderCSS },
+  ]
 }
 
 export const meta: MetaFunction = () => {
@@ -16,20 +22,33 @@ export const meta: MetaFunction = () => {
 
 export default function Index() {
   return (
-    <div className="container">
-      <div className="content">
-        <h1>Hello world</h1>
-      </div>
-      <h2>Places to stay</h2>
+    <AppShell
+      padding="md"
+      header={<Header />}
+      styles={theme => ({
+        main: {
+          backgroundColor:
+            theme.colorScheme === 'dark'
+              ? theme.colors.dark[8]
+              : theme.colors.gray[0],
+        },
+      })}
+    >
+      <div className="container">
+        <div className="content">
+          <h1>Hello world</h1>
+        </div>
+        <h2>Places to stay</h2>
 
-      <div className="houses">
-        {houses.map((house, index) => {
-          //...
-          return <House key={index} {...house} />
-        })}
-      </div>
+        <div className="houses">
+          {houses.map((house, index) => {
+            //...
+            return <House key={index} {...house} />
+          })}
+        </div>
 
-      <Button>hello</Button>
-    </div>
+        <Button>hello</Button>
+      </div>
+    </AppShell>
   )
 }
