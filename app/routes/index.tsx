@@ -1,5 +1,5 @@
 import type { MetaFunction, LinksFunction } from 'remix'
-import { Button, AppShell } from '@mantine/core'
+import { AppShell } from '@mantine/core'
 import houses from '../data/houses'
 import House from '../components/House'
 import indexCSS from '../styles/index.css'
@@ -21,33 +21,15 @@ export const meta: MetaFunction = () => {
 
 export default function Index() {
   return (
-    <AppShell
-      padding="md"
-      header={<Header />}
-      styles={theme => ({
-        main: {
-          backgroundColor:
-            theme.colorScheme === 'dark'
-              ? theme.colors.dark[8]
-              : theme.colors.gray[0],
-        },
-      })}
-    >
-      <div className="container">
-        <div className="content">
-          <h1>Hello world</h1>
-        </div>
-        <h2>Places to stay</h2>
+    <div className="container">
+      <h2>Places to stay</h2>
 
-        <div className="houses">
-          {houses.map((house, index) => {
-            //...
-            return <House key={index} {...house} />
-          })}
-        </div>
-
-        <Button>hello</Button>
+      <div className="houses">
+        {houses.map((house, index) => {
+          //...
+          return <House key={index} {...house} />
+        })}
       </div>
-    </AppShell>
+    </div>
   )
 }

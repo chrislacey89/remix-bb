@@ -7,11 +7,12 @@ import {
   ScrollRestoration,
 } from 'remix'
 import type { MetaFunction, LinksFunction } from 'remix'
-import { MantineProvider } from '@mantine/core'
-
+import { MantineProvider, AppShell } from '@mantine/core'
+import Header from './components/Header'
 import reset from './styles/reset.css'
 import tailwindStyles from './styles/tailwind.css'
 import global from './styles/global.css'
+import headerCSS from './styles/hea'
 export const links: LinksFunction = () => {
   return [
     { rel: 'stylesheet', href: reset },
@@ -33,7 +34,6 @@ export default function App() {
         <Links />
       </head>
       <body>
-        return (
         <MantineProvider
           theme={{
             colors: {
@@ -43,7 +43,20 @@ export default function App() {
             },
           }}
         >
-          <Outlet />
+          <AppShell
+            padding="md"
+            header={<Header />}
+            styles={theme => ({
+              main: {
+                backgroundColor:
+                  theme.colorScheme === 'dark'
+                    ? theme.colors.dark[8]
+                    : theme.colors.gray[0],
+              },
+            })}
+          >
+            <Outlet />
+          </AppShell>
         </MantineProvider>
         <ScrollRestoration />
         <Scripts />
