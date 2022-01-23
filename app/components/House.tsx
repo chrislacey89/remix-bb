@@ -6,6 +6,9 @@ interface HouseProps {
   type: string
   town: string
   title: string
+  price: string
+  description: string
+  guests: number
 }
 
 export default function House({ id, picture, type, town, title }: HouseProps) {

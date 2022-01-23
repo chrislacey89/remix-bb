@@ -7,6 +7,8 @@ import {
   ScrollRestoration,
 } from 'remix'
 import type { MetaFunction, LinksFunction } from 'remix'
+import { MantineProvider } from '@mantine/core'
+
 import reset from './styles/reset.css'
 import tailwindStyles from './styles/tailwind.css'
 import global from './styles/global.css'
@@ -31,7 +33,18 @@ export default function App() {
         <Links />
       </head>
       <body>
-        <Outlet />
+        return (
+        <MantineProvider
+          theme={{
+            colors: {
+              // Add your color
+              'airbb-red': ['#E9EDFC'],
+              'deep-blue': ['#E9EDFC', '#C1CCF6', '#99ABF0' /* ... */],
+            },
+          }}
+        >
+          <Outlet />
+        </MantineProvider>
         <ScrollRestoration />
         <Scripts />
         {process.env.NODE_ENV === 'development' && <LiveReload />}
