@@ -51,9 +51,10 @@ export default function Houses() {
 
   const [startDateOpened, setStartDateOpened] = useState(false)
   const [endDateOpened, setEndDateOpened] = useState(false)
-  const [numberOfNightsBetweenDates, setNmberOfNightsBetweenDates] = useState(0)
+  const [numberOfNightsBetweenDates, setNumberOfNightsBetweenDates] =
+    useState(0)
   useEffect(() => {
-    setNmberOfNightsBetweenDates(
+    setNumberOfNightsBetweenDates(
       dayjs.duration(dayjs(value[1]).diff(dayjs(value[0]))).days(),
     )
   }, [value])
