@@ -5,6 +5,11 @@ import House from '../components/House'
 import indexCSS from '../styles/index.css'
 
 import Header from '~/components/Header'
+
+export async function action({ request }) {
+  console.log('test')
+  console.log('🚀 ~ file: Header.tsx ~ line 14 ~ request', request)
+}
 export const links: LinksFunction = () => {
   return [
     { rel: 'stylesheet', href: indexCSS },

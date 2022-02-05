@@ -74,6 +74,7 @@ export default function PasswordStrength({
       onBlurCapture={() => setPopoverOpened(false)}
       target={
         <PasswordInput
+          name="password"
           required
           label="Your password"
           placeholder="Your password"

@@ -5,3 +5,4 @@ node_modules
 .env
 app/styles/*
 
+/prisma/dev.db

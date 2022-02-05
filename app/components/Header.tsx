@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { Link } from 'remix'
+import { Form, Link } from 'remix'
+
 import {
   Button,
   Header as MantineHeader,
@@ -7,8 +8,18 @@ import {
   TextInput,
   PasswordInput,
 } from '@mantine/core'
-import PasswordStrength from './PasswordStrength'
-export default function Header() {
+import Signup from './Signup'
+import Login from './Login'
+export async function action({ request }) {
+  console.log('test')
+  console.log('🚀 ~ file: Header.tsx ~ line 14 ~ request', request)
+}
+
+interface HeaderProps {
+  authenticated: boolean
+}
+
+export default function Header({ authenticated }: HeaderProps) {
   const [signUpOpened, setSignUpOpened] = useState(false)
   const [loginOpened, setLoginOpened] = useState(false)
   const [email, setEmail] = useState('')
@@ -17,33 +28,7 @@ export default function Header() {
   return (
     <>
       <Modal opened={signUpOpened} onClose={() => setSignUpOpened(false)}>
-        <div>
-          <form>
-            <TextInput
-              id="email"
-              type="email"
-              label="Email"
-              placeholder="Email address"
-              value={email}
-              onChange={event => setEmail(event.currentTarget.value)}
-            />
-            <PasswordStrength
-              passwordValue={passwordValue}
-              onPasswordChange={event => {
-                setPasswordValue(event.currentTarget.value)
-              }}
-            />
-            <PasswordInput
-              id="passwordConfirm"
-              type="password"
-              label="Confirm Password"
-              placeholder="Enter your password again"
-            />
-            <Button color="red" fullWidth className="mt-4">
-              Log in
-            </Button>
-          </form>
-        </div>
+        <Signup />
       </Modal>
 
       <Modal
@@ -51,25 +36,7 @@ export default function Header() {
         title="Log in"
         onClose={() => setLoginOpened(false)}
       >
-        <div>
-          <form>
-            <TextInput
-              id="email"
-              type="email"
-              label="Email"
-              placeholder="Email address"
-            />
-            <PasswordInput
-              id="password"
-              type="password"
-              label="Password"
-              placeholder="Password"
-            />
-            <Button color="red" fullWidth className="mt-4">
-              Log in
-            </Button>
-          </form>
-        </div>
+        <Login />
       </Modal>
 
       <MantineHeader height={80}>
@@ -85,7 +52,7 @@ export default function Header() {
           </Link>
 
           <nav className="flex items-center	ml-auto">
-            <Button
+            {authenticated <Button
               onClick={() => setSignUpOpened(true)}
               variant="subtle"
               color="dark"
@@ -93,7 +60,7 @@ export default function Header() {
               radius="xl"
             >
               Sign Up
-            </Button>
+            </Button>}
             <Button
               onClick={() => setLoginOpened(true)}
               variant="subtle"

@@ -5,14 +5,35 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useActionData,
+  json,
+  useSearchParams,
+  Link,
+  Form,
+  useLoaderData,
 } from 'remix'
-import type { MetaFunction, LinksFunction } from 'remix'
+import type {
+  ActionFunction,
+  LoaderFunction,
+  LinksFunction,
+  MetaFunction,
+} from 'remix'
+
 import { MantineProvider, AppShell } from '@mantine/core'
 import Header from './components/Header'
 import reset from './styles/reset.css'
 import tailwindStyles from './styles/tailwind.css'
 import global from './styles/global.css'
-import headerCSS from './styles/hea'
+// import headerCSS from './styles/header'
+import { db } from '~/utils/db.server'
+import {
+  requireUserId,
+  getUserId,
+  createUserSession,
+  login,
+  register,
+} from '~/utils/session.server'
+
 export const links: LinksFunction = () => {
   return [
     { rel: 'stylesheet', href: reset },
@@ -24,7 +45,121 @@ export const meta: MetaFunction = () => {
   return { title: 'New Remix App' }
 }
 
+function validateUsername(username: unknown) {
+  if (typeof username !== 'string' || username.length < 3) {
+    return `Usernames must be at least 3 characters long`
+  }
+}
+
+function validatePassword(password: unknown) {
+  if (typeof password !== 'string' || password.length < 6) {
+    return `Passwords must be at least 6 characters long`
+  }
+}
+
+type ActionData = {
+  formError?: string
+  fieldErrors?: {
+    username: string | undefined
+    password: string | undefined
+  }
+  fields?: {
+    loginType: string
+    username: string
+    password: string
+  }
+}
+
+const badRequest = (data: ActionData) => json(data, { status: 400 })
+
+export const action: ActionFunction = async ({ request }) => {
+  const form = await request.formData()
+  console.log('🚀 ~ file: root.tsx ~ line 63 ~ form', form)
+  const loginType = form.get('loginType')
+  const username = form.get('username')
+  const password = form.get('password')
+  const redirectTo = form.get('redirectTo') ?? '/'
+  if (
+    typeof loginType !== 'string' ||
+    typeof username !== 'string' ||
+    typeof password !== 'string' ||
+    typeof redirectTo !== 'string'
+  ) {
+    console.error('error')
+    return badRequest({
+      formError: `Form not submitted correctly.`,
+    })
+  }
+
+  const fields = { loginType, username, password }
+  const fieldErrors = {
+    username: validateUsername(username),
+    password: validatePassword(password),
+  }
+  if (Object.values(fieldErrors).some(Boolean))
+    return badRequest({ fieldErrors, fields })
+  switch (loginType) {
+    case 'login': {
+      console.log('🧝🏻‍♂️🧝🏻‍♂️', loginType)
+      const user = await login({ username, password })
+      if (!user) {
+        return badRequest({
+          fields,
+          formError: `Username/Password combination is incorrect`,
+        })
+      }
+      console.log('creating session')
+      return createUserSession(user.id, redirectTo)
+    }
+    case 'register': {
+      console.info('register')
+      const userExists = await db.user.findFirst({
+        where: { username },
+      })
+      if (userExists) {
+        return badRequest({
+          fields,
+          formError: `User with username ${username} already exists`,
+        })
+      }
+      console.info('registering...')
+      const user = await register({ username, password })
+      if (!user) {
+        return badRequest({
+          fields,
+          formError: `Something went wrong trying to create a new user.`,
+        })
+      }
+      console.info('creating user...')
+
+      return createUserSession(user.id, '/')
+    }
+    default: {
+      console.log('err')
+      return badRequest({
+        fields,
+        formError: `Login type invalid`,
+      })
+    }
+  }
+}
+
+type LoaderData = { authenticated: boolean }
+
+export const loader: LoaderFunction = async ({ request }) => {
+  const userId = await getUserId(request)
+  console.log('🚀 ~ file: root.tsx ~ line 148 ~ userId', userId)
+  const loggedIn = userId !== null
+  // if (!userId) {
+  // eslint-disable-next-line @typescript-eslint/no-throw-literal
+  //   throw new Response('Unauthorized', { status: 401 })
+  // }
+  return { authenticated: loggedIn }
+}
+
 export default function App() {
+  const { authenticated } = useLoaderData<LoaderData>()
+
   return (
     <html lang="en">
       <head>
@@ -45,7 +180,7 @@ export default function App() {
         >
           <AppShell
             padding="md"
-            header={<Header />}
+            header={<Header authenticated={authenticated} />}
             styles={theme => ({
               main: {
                 backgroundColor:
