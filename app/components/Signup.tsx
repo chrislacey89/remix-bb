@@ -109,6 +109,7 @@ export default function Signup() {
         name="redirectTo"
         value={searchParams.get('redirectTo') ?? undefined}
       />
+
       <input type="hidden" name="loginType" value="register" />
       <Button type="submit" color="red" fullWidth className="mt-4">
         Sign up

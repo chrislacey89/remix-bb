@@ -24,15 +24,18 @@ import Header from './components/Header'
 import reset from './styles/reset.css'
 import tailwindStyles from './styles/tailwind.css'
 import global from './styles/global.css'
+import { authenticator } from '~/services/auth.server'
 // import headerCSS from './styles/header'
-import { db } from '~/utils/db.server'
-import {
-  requireUserId,
-  getUserId,
-  createUserSession,
-  login,
-  register,
-} from '~/utils/session.server'
+import { db } from '~/services/db.server'
+// import {
+//   requireUserId,
+//   getUserId,
+//   createUserSession,
+//   login,
+//   register,
+// } from '~/utils/session.server'
+
+import { register } from '~/services/session.server'
 
 export const links: LinksFunction = () => {
   return [
@@ -74,18 +77,18 @@ const badRequest = (data: ActionData) => json(data, { status: 400 })
 
 export const action: ActionFunction = async ({ request }) => {
   const form = await request.formData()
-  console.log('🚀 ~ file: root.tsx ~ line 63 ~ form', form)
   const loginType = form.get('loginType')
   const username = form.get('username')
   const password = form.get('password')
-  const redirectTo = form.get('redirectTo') ?? '/'
+  const redirectTo = '/'
+
   if (
     typeof loginType !== 'string' ||
     typeof username !== 'string' ||
     typeof password !== 'string' ||
     typeof redirectTo !== 'string'
   ) {
-    console.error('error')
+    console.error('!!! error')
     return badRequest({
       formError: `Form not submitted correctly.`,
     })
@@ -98,24 +101,22 @@ export const action: ActionFunction = async ({ request }) => {
   }
   if (Object.values(fieldErrors).some(Boolean))
     return badRequest({ fieldErrors, fields })
+  console.log('about to switch')
   switch (loginType) {
     case 'login': {
       console.log('🧝🏻‍♂️🧝🏻‍♂️', loginType)
-      const user = await login({ username, password })
-      if (!user) {
-        return badRequest({
-          fields,
-          formError: `Username/Password combination is incorrect`,
-        })
-      }
-      console.log('creating session')
-      return createUserSession(user.id, redirectTo)
+
+      return authenticator.authenticate('user-pass', request, {
+        successRedirect: '/',
+        failureRedirect: '/',
+      })
     }
     case 'register': {
       console.info('register')
       const userExists = await db.user.findFirst({
         where: { username },
       })
+      console.log('user exists:', userExists)
       if (userExists) {
         return badRequest({
           fields,
@@ -131,8 +132,17 @@ export const action: ActionFunction = async ({ request }) => {
         })
       }
       console.info('creating user...')
+      return authenticator.authenticate('user-pass', request, {
+        successRedirect: '/',
+        failureRedirect: '/',
+      })
+      // return createUserSession(user.id, '/')
+    }
+    case 'logout': {
+      console.info('loggingout')
+      return authenticator.logout(request, { redirectTo: '/' })
 
-      return createUserSession(user.id, '/')
+      // return createUserSession(user.id, '/')
     }
     default: {
       console.log('err')
@@ -146,19 +156,20 @@ export const action: ActionFunction = async ({ request }) => {
 
 type LoaderData = { authenticated: boolean }
 
-export const loader: LoaderFunction = async ({ request }) => {
-  const userId = await getUserId(request)
-  console.log('🚀 ~ file: root.tsx ~ line 148 ~ userId', userId)
-  const loggedIn = userId !== null
-  // if (!userId) {
-  // eslint-disable-next-line @typescript-eslint/no-throw-literal
-  //   throw new Response('Unauthorized', { status: 401 })
-  // }
-  return { authenticated: loggedIn }
-}
+// export const loader: LoaderFunction = async ({ request }) => {
+// todo: fix these 3 lines with proper auth check
+// const userId = await getUserId(request)
+// console.log('🚀 ~ file: root.tsx ~ line 148 ~ userId', userId)
+// const loggedIn = userId !== null
+// if (!userId) {
+// eslint-disable-next-line @typescript-eslint/no-throw-literal
+//   throw new Response('Unauthorized', { status: 401 })
+// }
+// return { authenticated: loggedIn }
+// }
 
 export default function App() {
-  const { authenticated } = useLoaderData<LoaderData>()
+  // const { authenticated } = useLoaderData<LoaderData>()
 
   return (
     <html lang="en">
@@ -180,7 +191,7 @@ export default function App() {
         >
           <AppShell
             padding="md"
-            header={<Header authenticated={authenticated} />}
+            header={<Header authenticated={true} />}
             styles={theme => ({
               main: {
                 backgroundColor:

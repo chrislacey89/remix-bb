@@ -52,7 +52,7 @@ export default function Header({ authenticated }: HeaderProps) {
           </Link>
 
           <nav className="flex items-center	ml-auto">
-            {authenticated <Button
+            <Button
               onClick={() => setSignUpOpened(true)}
               variant="subtle"
               color="dark"
@@ -60,7 +60,7 @@ export default function Header({ authenticated }: HeaderProps) {
               radius="xl"
             >
               Sign Up
-            </Button>}
+            </Button>
             <Button
               onClick={() => setLoginOpened(true)}
               variant="subtle"
@@ -70,6 +70,21 @@ export default function Header({ authenticated }: HeaderProps) {
             >
               Log in
             </Button>
+            <Form method="post">
+              <input type="hidden" name="loginType" value="logout" />
+              <input type="hidden" name="username" value="logout" />
+              <input type="hidden" name="password" value="logout" />
+              <input type="hidden" name="redirectTo" value="/" />
+              <Button
+                type="submit"
+                variant="subtle"
+                color="dark"
+                size="md"
+                radius="xl"
+              >
+                Log Out
+              </Button>
+            </Form>
           </nav>
         </div>
       </MantineHeader>

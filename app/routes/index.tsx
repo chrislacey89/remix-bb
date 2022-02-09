@@ -1,10 +1,8 @@
 import type { MetaFunction, LinksFunction } from 'remix'
-import { AppShell } from '@mantine/core'
+
 import houses from '../data/houses'
 import House from '../components/House'
 import indexCSS from '../styles/index.css'
-
-import Header from '~/components/Header'
 
 export async function action({ request }) {
   console.log('test')
