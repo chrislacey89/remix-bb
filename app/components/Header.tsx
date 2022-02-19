@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Form, Link } from 'remix'
 
 import {
@@ -10,6 +10,7 @@ import {
 } from '@mantine/core'
 import Signup from './Signup'
 import Login from './Login'
+import HeaderNavProfile from './HeaderNavProfile'
 export async function action({ request }) {
   console.log('test')
   console.log('🚀 ~ file: Header.tsx ~ line 14 ~ request', request)
@@ -22,8 +23,6 @@ interface HeaderProps {
 export default function Header({ authenticated }: HeaderProps) {
   const [signUpOpened, setSignUpOpened] = useState(false)
   const [loginOpened, setLoginOpened] = useState(false)
-  const [email, setEmail] = useState('')
-  const [passwordValue, setPasswordValue] = useState<string>('')
 
   return (
     <>
@@ -52,39 +51,7 @@ export default function Header({ authenticated }: HeaderProps) {
           </Link>
 
           <nav className="flex items-center	ml-auto">
-            <Button
-              onClick={() => setSignUpOpened(true)}
-              variant="subtle"
-              color="dark"
-              size="md"
-              radius="xl"
-            >
-              Sign Up
-            </Button>
-            <Button
-              onClick={() => setLoginOpened(true)}
-              variant="subtle"
-              color="dark"
-              size="md"
-              radius="xl"
-            >
-              Log in
-            </Button>
-            <Form method="post">
-              <input type="hidden" name="loginType" value="logout" />
-              <input type="hidden" name="username" value="logout" />
-              <input type="hidden" name="password" value="logout" />
-              <input type="hidden" name="redirectTo" value="/" />
-              <Button
-                type="submit"
-                variant="subtle"
-                color="dark"
-                size="md"
-                radius="xl"
-              >
-                Log Out
-              </Button>
-            </Form>
+            <HeaderNavProfile authenticated={authenticated} />
           </nav>
         </div>
       </MantineHeader>

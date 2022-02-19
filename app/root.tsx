@@ -26,14 +26,15 @@ import tailwindStyles from './styles/tailwind.css'
 import global from './styles/global.css'
 import { authenticator } from '~/services/auth.server'
 // import headerCSS from './styles/header'
-import { db } from '~/services/db.server'
-// import {
-//   requireUserId,
-//   getUserId,
-//   createUserSession,
-//   login,
-//   register,
-// } from '~/utils/session.server'
+import { db } from '~/utils/db.server'
+import {
+  requireUserId,
+  getUserId,
+  createUserSession,
+  login,
+  register,
+  logout,
+} from '~/utils/session.server'
 
 import { register } from '~/services/session.server'
 
@@ -104,12 +105,14 @@ export const action: ActionFunction = async ({ request }) => {
   console.log('about to switch')
   switch (loginType) {
     case 'login': {
-      console.log('🧝🏻‍♂️🧝🏻‍♂️', loginType)
-
-      return authenticator.authenticate('user-pass', request, {
-        successRedirect: '/',
-        failureRedirect: '/',
-      })
+      const user = await login({ username, password })
+      if (!user) {
+        return badRequest({
+          fields,
+          formError: `Username/Password combination is incorrect`,
+        })
+      }
+      return createUserSession(request, user.id)
     }
     case 'register': {
       console.info('register')
@@ -132,15 +135,12 @@ export const action: ActionFunction = async ({ request }) => {
         })
       }
       console.info('creating user...')
-      return authenticator.authenticate('user-pass', request, {
-        successRedirect: '/',
-        failureRedirect: '/',
-      })
-      // return createUserSession(user.id, '/')
+
+      return createUserSession(request, user.id)
     }
     case 'logout': {
       console.info('loggingout')
-      return authenticator.logout(request, { redirectTo: '/' })
+      return logout(request)
 
       // return createUserSession(user.id, '/')
     }
@@ -156,20 +156,16 @@ export const action: ActionFunction = async ({ request }) => {
 
 type LoaderData = { authenticated: boolean }
 
-// export const loader: LoaderFunction = async ({ request }) => {
-// todo: fix these 3 lines with proper auth check
-// const userId = await getUserId(request)
-// console.log('🚀 ~ file: root.tsx ~ line 148 ~ userId', userId)
-// const loggedIn = userId !== null
-// if (!userId) {
-// eslint-disable-next-line @typescript-eslint/no-throw-literal
-//   throw new Response('Unauthorized', { status: 401 })
-// }
-// return { authenticated: loggedIn }
-// }
+export const loader: LoaderFunction = async ({ request }) => {
+  // todo: fix these 3 lines with proper auth check
+  const userId = await getUserId(request)
+  const loggedIn = userId !== null
+
+  return { authenticated: loggedIn }
+}
 
 export default function App() {
-  // const { authenticated } = useLoaderData<LoaderData>()
+  const { authenticated } = useLoaderData<LoaderData>()
 
   return (
     <html lang="en">
@@ -191,7 +187,7 @@ export default function App() {
         >
           <AppShell
             padding="md"
-            header={<Header authenticated={true} />}
+            header={<Header authenticated={authenticated} />}
             styles={theme => ({
               main: {
                 backgroundColor:

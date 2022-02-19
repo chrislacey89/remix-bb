@@ -55,20 +55,14 @@ export async function getUserId(request: Request) {
   return userId
 }
 
-export async function requireUserId(
-  request: Request,
-  redirectTo: string = new URL(request.url).pathname,
-) {
+export async function requireUserId(request: Request) {
   const session = await getUserSession(request)
-  const userId = session.get('userId')
-  if (!userId || typeof userId !== 'string') {
-    const searchParams = new URLSearchParams([['redirectTo', redirectTo]])
-    throw redirect(`/login?${searchParams}`)
-  }
-  return userId
+  return session.get('userId')
 }
 
 export async function getUser(request: Request) {
+  const redirectTo: string = new URL(request.url).pathname
+
   const userId = await getUserId(request)
   if (typeof userId !== 'string') {
     return null
@@ -80,20 +74,29 @@ export async function getUser(request: Request) {
     })
     return user
   } catch {
-    throw logout(request)
+    await logout(request)
   }
 }
 
 export async function logout(request: Request) {
+  const redirectTo: string = new URL(request.url).pathname
+  console.log('⏳⏳⏳', redirectTo)
+
   const session = await storage.getSession(request.headers.get('Cookie'))
-  return redirect('/login', {
+  return redirect(redirectTo, {
     headers: {
       'Set-Cookie': await storage.destroySession(session),
     },
   })
 }
 
-export async function createUserSession(userId: string, redirectTo: string) {
+export async function createUserSession(request: Request, userId: string) {
+  const redirectTo: string = new URL(request.url).pathname
+  console.log(
+    '🐨🐨🐨 ~ file: session.server.ts ~ line 94 ~ redirectTo',
+    redirectTo,
+  )
+
   const session = await storage.getSession()
   session.set('userId', userId)
   return redirect(redirectTo, {

@@ -83,31 +83,29 @@ export default function Signup() {
 
   return (
     <Form method="post">
-      <Form method="post">
-        <TextInput
-          id="email"
-          type="email"
-          name="username"
-          label="Email"
-          placeholder="Email address"
-        />
-        <PasswordInput
-          id="password"
-          type="password"
-          name="password"
-          label="Password"
-          placeholder="Password"
-        />
-        <input
-          type="hidden"
-          name="redirectTo"
-          value={searchParams.get('redirectTo') ?? undefined}
-        />
-        <input type="hidden" name="loginType" value="login" />
-        <Button type="submit" color="red" fullWidth className="mt-4">
-          Log in
-        </Button>
-      </Form>
+      <TextInput
+        id="email"
+        type="email"
+        name="username"
+        label="Email"
+        placeholder="Email address"
+      />
+      <PasswordInput
+        id="password"
+        type="password"
+        name="password"
+        label="Password"
+        placeholder="Password"
+      />
+      <input
+        type="hidden"
+        name="redirectTo"
+        value={searchParams.get('redirectTo') ?? undefined}
+      />
+      <input type="hidden" name="loginType" value="login" />
+      <Button type="submit" color="red" fullWidth className="mt-4">
+        Log in
+      </Button>
     </Form>
   )
 }

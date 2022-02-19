@@ -5,7 +5,7 @@ specifiers:
   '@mantine/dates': ^3.6.2
   '@mantine/hooks': 3.6.2
   '@modulz/radix-icons': ^4.0.0
-  '@prisma/client': ^3.8.1
+  '@prisma/client': ^3.9.2
   '@remix-run/dev': ^1.1.1
   '@remix-run/react': ^1.1.1
   '@remix-run/serve': ^1.1.1
@@ -29,7 +29,7 @@ specifiers:
   postcss: ^8.4.5
   postcss-cli: ^9.1.0
   prettier: ^2.5.1
-  prisma: ^3.8.1
+  prisma: ^3.9.2
   react: ^17.0.2
   react-dom: ^17.0.2
   remix: ^1.1.1
@@ -48,13 +48,12 @@ dependencies:
   '@mantine/dates': 3.6.2_5591208414e6a86c273a973594c90533
   '@mantine/hooks': 3.6.2_react@17.0.2
   '@modulz/radix-icons': 4.0.0_react@17.0.2
-  '@prisma/client': 3.8.1_prisma@3.8.1
+  '@prisma/client': 3.9.2_prisma@3.9.2
   '@remix-run/react': 1.1.1_react-dom@17.0.2+react@17.0.2
   '@remix-run/serve': 1.1.1_react-dom@17.0.2+react@17.0.2
   '@remix-run/server-runtime': 1.1.3_react-dom@17.0.2+react@17.0.2
   bcryptjs: 2.4.3
   dayjs: 1.10.7
-  prisma: 3.8.1
   react: 17.0.2
   react-dom: 17.0.2_react@17.0.2
   remix: 1.1.1
@@ -80,6 +79,7 @@ devDependencies:
   postcss: 8.4.5
   postcss-cli: 9.1.0_postcss@8.4.5
   prettier: 2.5.1
+  prisma: 3.9.2
   stylelint: 14.2.0
   stylelint-color-format: 1.1.0_stylelint@14.2.0
   stylelint-config-rational-order: 0.1.2
@@ -529,8 +529,8 @@ packages:
     resolution: {integrity: sha512-92FRmppjjqz29VMJ2dn+xdyXZBrMlE42AV6Kq6BwjWV7CNUW1hs2FtxSNLQE+gJhaZ6AAmYuO9y8dshhcBl7vA==}
     dev: false
 
-  /@prisma/client/3.8.1_prisma@3.8.1:
-    resolution: {integrity: sha512-NxD1Xbkx1eT1mxSwo1RwZe665mqBETs0VxohuwNfFIxMqcp0g6d4TgugPxwZ4Jb4e5wCu8mQ9quMedhNWIWcZQ==}
+  /@prisma/client/3.9.2_prisma@3.9.2:
+    resolution: {integrity: sha512-VlEIYVMyfFZHbVBOlunPl47gmP/Z0zzPjPj8I7uKEIaABqrUy50ru3XS0aZd8GFvevVwt7p91xxkUjNjrWhKAQ==}
     engines: {node: '>=12.6'}
     requiresBuild: true
     peerDependencies:
@@ -539,18 +539,18 @@ packages:
       prisma:
         optional: true
     dependencies:
-      '@prisma/engines-version': 3.8.0-43.34df67547cf5598f5a6cd3eb45f14ee70c3fb86f
-      prisma: 3.8.1
+      '@prisma/engines-version': 3.9.0-58.bcc2ff906db47790ee902e7bbc76d7ffb1893009
+      prisma: 3.9.2
     dev: false
 
-  /@prisma/engines-version/3.8.0-43.34df67547cf5598f5a6cd3eb45f14ee70c3fb86f:
-    resolution: {integrity: sha512-G2JH6yWt6ixGKmsRmVgaQYahfwMopim0u/XLIZUo2o/mZ5jdu7+BL+2V5lZr7XiG1axhyrpvlyqE/c0OgYSl3g==}
+  /@prisma/engines-version/3.9.0-58.bcc2ff906db47790ee902e7bbc76d7ffb1893009:
+    resolution: {integrity: sha512-5Dh+qTDhpPR66w6NNAnPs+/W/Qt4r1DSd+qhfPFcDThUK4uxoZKGlPb2IYQn5LL+18aIGnmteDf7BnVMmvBNSQ==}
     dev: false
 
-  /@prisma/engines/3.8.0-43.34df67547cf5598f5a6cd3eb45f14ee70c3fb86f:
-    resolution: {integrity: sha512-bHYubuItSN/DGYo36aDu7xJiJmK52JOSHs4MK+KbceAtwS20BCWadRgtpQ3iZ2EXfN/B1T0iCXlNraaNwnpU2w==}
+  /@prisma/engines/3.9.0-58.bcc2ff906db47790ee902e7bbc76d7ffb1893009:
+    resolution: {integrity: sha512-qM+uJbkelB21bnK44gYE049YTHIjHysOuj0mj5U2gDGyNLfmiazlggzFPCgEjgme4U5YB2tYs6Z5Hq08Kl8pjA==}
     requiresBuild: true
-    dev: false
+    dev: true
 
   /@radix-ui/number/0.1.0:
     resolution: {integrity: sha512-rpf6QiOWLHAkM4FEMYu9i+5Jr8cKT893+R4mPpcdsy4LD7omr9JfdOqj/h/xPA5+EcVrpMMlU6rrRYpUB5UI8g==}
@@ -5674,14 +5674,14 @@ packages:
       parse-ms: 2.1.0
     dev: true
 
-  /prisma/3.8.1:
-    resolution: {integrity: sha512-Q8zHwS9m70TaD7qI8u+8hTAmiTpK+IpvRYF3Rgb/OeWGQJOMgZCFFvNCiSfoLEQ95wilK7ctW3KOpc9AuYnRUA==}
+  /prisma/3.9.2:
+    resolution: {integrity: sha512-i9eK6cexV74OgeWaH3+e6S07kvC9jEZTl6BqtBH398nlCU0tck7mE9dicY6YQd+euvMjjCtY89q4NgmaPnUsSg==}
     engines: {node: '>=12.6'}
     hasBin: true
     requiresBuild: true
     dependencies:
-      '@prisma/engines': 3.8.0-43.34df67547cf5598f5a6cd3eb45f14ee70c3fb86f
-    dev: false
+      '@prisma/engines': 3.9.0-58.bcc2ff906db47790ee902e7bbc76d7ffb1893009
+    dev: true
 
   /progress/2.0.3:
     resolution: {integrity: sha512-7PiHtLll5LdnKIMw100I+8xJXR5gW2QwWYkT6iJva0bXitZKa/XMrSbdmg3r2Xnaidz9Qumd0VPaMrZlF9V9sA==}
