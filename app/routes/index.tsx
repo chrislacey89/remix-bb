@@ -1,13 +1,10 @@
-import type { MetaFunction, LinksFunction } from 'remix'
-
-import houses from '../data/houses'
+import { House as HouseType } from '@prisma/client'
+import { useLoaderData } from 'remix'
+import type { LoaderFunction, LinksFunction, MetaFunction } from 'remix'
 import House from '../components/House'
 import indexCSS from '../styles/index.css'
+import { db } from '~/utils/db.server'
 
-export async function action({ request }) {
-  console.log('test')
-  console.log('🚀 ~ file: Header.tsx ~ line 14 ~ request', request)
-}
 export const links: LinksFunction = () => {
   return [
     { rel: 'stylesheet', href: indexCSS },
@@ -22,7 +19,16 @@ export const meta: MetaFunction = () => {
   }
 }
 
+export const loader: LoaderFunction = async () => {
+  const houses = await db.house.findMany()
+
+  return houses
+}
+type LoaderData = HouseType[]
+
 export default function Index() {
+  const houses = useLoaderData<LoaderData>()
+  console.log('🚀 ~ file: index.tsx ~ line 49 ~ houses', houses)
   return (
     <div className="container">
       <h2>Places to stay</h2>

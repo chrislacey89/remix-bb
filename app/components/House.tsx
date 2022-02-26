@@ -6,7 +6,7 @@ interface HouseProps {
   type: string
   town: string
   title: string
-  price: string
+  price: number
   description: string
   guests: number
 }

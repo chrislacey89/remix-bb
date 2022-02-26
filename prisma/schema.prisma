@@ -32,4 +32,5 @@ model House {
   town        String
   title       String
   price       Int
+  guests      Int
 }
