@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@hookform/devtools": "^4.0.2",
+    "@hookform/resolvers": "^2.8.8",
     "@mantine/core": "3.6.2",
     "@mantine/dates": "^3.6.2",
     "@mantine/hooks": "3.6.2",
@@ -30,7 +31,9 @@
     "react-hook-form": "^7.27.1",
     "remix": "^1.1.1",
     "remix-auth": "^3.2.1",
-    "remix-auth-form": "^1.1.1"
+    "remix-auth-form": "^1.1.1",
+    "resolvers": "link:@hookform/resolvers",
+    "zod": "link:@hookform/resolvers/zod"
   },
   "devDependencies": {
     "@remix-run/dev": "^1.1.1",

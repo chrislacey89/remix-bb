@@ -1,4 +1,6 @@
 import { useState, useRef } from 'react'
+import { z } from 'zod'
+import { zodResolver } from '@hookform/resolvers/zod'
 
 import { useForm } from 'react-hook-form'
 import { Link, useActionData, json, Form, useSearchParams } from 'remix'
@@ -77,7 +79,19 @@ export const action: ActionFunction = async ({ request }) => {
   }
   return createUserSession(user.id, redirectTo)
 }
+const signupSchema = z
+  .object({
+    username: z.string().email().required,
+    password: z
+      .string()
+      .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/),
+    passwordConfirm: z.string(),
+  })
+  .refine(data => data.password === data.passwordConfirm, {
+    message: "Passwords don't match",
+  })
 
+type Schema = z.infer<typeof signupSchema>
 export default function Signup() {
   const [searchParams] = useSearchParams()
 
@@ -88,7 +102,7 @@ export default function Signup() {
     handleSubmit,
     control,
     formState: { errors },
-  } = useForm()
+  } = useForm<Schema>({ resolver: zodResolver(signupSchema) })
 
   const email = hookformRegister('username', { required: true })
 
