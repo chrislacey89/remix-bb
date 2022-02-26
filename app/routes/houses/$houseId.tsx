@@ -1,3 +1,4 @@
+import { House as HouseType } from '@prisma/client'
 import { useState, useEffect } from 'react'
 import type { LoaderFunction, MetaFunction } from 'remix'
 import { useLoaderData } from 'remix'
@@ -15,6 +16,7 @@ import dayjs from 'dayjs'
 import duration from 'dayjs/plugin/duration'
 
 import houses from '../../data/houses'
+import { db } from '~/utils/db.server'
 dayjs.extend(duration)
 interface House {
   id: string
@@ -40,13 +42,20 @@ export const meta: MetaFunction = ({ data }: { data: House | undefined }) => {
   }
 }
 
+// export const loader: LoaderFunction = async ({ params }) => {
+//   return houses.filter(house => house.id === params.houseId)[0]
+// }
+
+type LoaderData = HouseType
+
 export const loader: LoaderFunction = async ({ params }) => {
-  return houses.filter(house => house.id === params.houseId)[0]
+  const house = await db.house.findUnique({ where: { id: params.houseId } })
+  return house
 }
 
 export default function Houses() {
   const { picture, town, type, title, price, description, guests } =
-    useLoaderData<House>()
+    useLoaderData<LoaderData>()
   const [value, setValue] = useState<[Date | null, Date | null]>([null, null])
 
   const [startDateOpened, setStartDateOpened] = useState(false)

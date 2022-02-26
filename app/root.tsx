@@ -24,7 +24,6 @@ import Header from './components/Header'
 import reset from './styles/reset.css'
 import tailwindStyles from './styles/tailwind.css'
 import global from './styles/global.css'
-import { authenticator } from '~/services/auth.server'
 // import headerCSS from './styles/header'
 import { db } from '~/utils/db.server'
 import {
@@ -35,8 +34,6 @@ import {
   register,
   logout,
 } from '~/utils/session.server'
-
-import { register } from '~/services/session.server'
 
 export const links: LinksFunction = () => {
   return [
