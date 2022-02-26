@@ -1,7 +1,10 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
+
+import { useForm } from 'react-hook-form'
 import { Link, useActionData, json, Form, useSearchParams } from 'remix'
 import type { ActionFunction } from 'remix'
 import { Button, TextInput, PasswordInput } from '@mantine/core'
+import { DevTool } from '@hookform/devtools'
 import PasswordStrength from './PasswordStrength'
 import { db } from '~/utils/db.server'
 import { createUserSession, login, register } from '~/utils/session.server'
@@ -78,42 +81,54 @@ export const action: ActionFunction = async ({ request }) => {
 export default function Signup() {
   const [searchParams] = useSearchParams()
 
-  const [email, setEmail] = useState('')
   const [passwordValue, setPasswordValue] = useState<string>('')
 
-  return (
-    <Form method="post">
-      <TextInput
-        id="email"
-        name="username"
-        type="email"
-        label="Email"
-        placeholder="Email address"
-        value={email}
-        onChange={event => setEmail(event.currentTarget.value)}
-      />
-      <PasswordStrength
-        passwordValue={passwordValue}
-        onPasswordChange={event => {
-          setPasswordValue(event.currentTarget.value)
-        }}
-      />
-      <PasswordInput
-        id="passwordConfirm"
-        type="password"
-        label="Confirm Password"
-        placeholder="Enter your password again"
-      />
-      <input
-        type="hidden"
-        name="redirectTo"
-        value={searchParams.get('redirectTo') ?? undefined}
-      />
+  const {
+    register: hookformRegister,
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useForm()
 
-      <input type="hidden" name="loginType" value="register" />
-      <Button type="submit" color="red" fullWidth className="mt-4">
-        Sign up
-      </Button>
-    </Form>
+  const email = hookformRegister('username', { required: true })
+
+  return (
+    <>
+      <Form method="post">
+        <TextInput
+          id="email"
+          ref={email.ref}
+          name="username"
+          type="email"
+          label="Email"
+          placeholder="Email address"
+          onChange={email.onChange}
+          onBlur={email.onBlur}
+        />
+        <PasswordStrength
+          passwordValue={passwordValue}
+          onPasswordChange={event => {
+            setPasswordValue(event.currentTarget.value)
+          }}
+        />
+        <PasswordInput
+          id="passwordConfirm"
+          type="password"
+          label="Confirm Password"
+          placeholder="Enter your password again"
+        />
+        <input
+          type="hidden"
+          name="redirectTo"
+          value={searchParams.get('redirectTo') ?? undefined}
+        />
+
+        <input type="hidden" name="loginType" value="register" />
+        <Button type="submit" color="red" fullWidth className="mt-4">
+          Sign up
+        </Button>
+      </Form>
+      <DevTool control={control} />
+    </>
   )
 }

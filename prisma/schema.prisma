@@ -16,4 +16,20 @@ model User {
   updatedAt    DateTime @updatedAt
   username     String   @unique
   passwordHash String
+  houses       House[]
+}
+
+model House {
+  id          String   @id @default(uuid())
+  ownerId     String
+  owner       User     @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  name        String
+  picture     String
+  description String
+  type        String
+  town        String
+  title       String
+  price       Int
 }
