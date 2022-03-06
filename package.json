@@ -33,7 +33,8 @@
     "remix-auth": "^3.2.1",
     "remix-auth-form": "^1.1.1",
     "resolvers": "link:@hookform/resolvers",
-    "zod": "link:@hookform/resolvers/zod"
+    "zod": "^3.13.4",
+    "zustand": "^3.7.1"
   },
   "devDependencies": {
     "@remix-run/dev": "^1.1.1",

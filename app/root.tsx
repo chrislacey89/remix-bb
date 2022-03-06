@@ -20,11 +20,13 @@ import type {
 } from 'remix'
 
 import { MantineProvider, AppShell } from '@mantine/core'
+import { useEffect } from 'react'
 import Header from './components/Header'
 import reset from './styles/reset.css'
 import tailwindStyles from './styles/tailwind.css'
 import global from './styles/global.css'
 // import headerCSS from './styles/header'
+import { useStore } from './store/store'
 import { db } from '~/utils/db.server'
 import {
   requireUserId,
@@ -34,7 +36,6 @@ import {
   register,
   logout,
 } from '~/utils/session.server'
-
 export const links: LinksFunction = () => {
   return [
     { rel: 'stylesheet', href: reset },
@@ -163,6 +164,11 @@ export const loader: LoaderFunction = async ({ request }) => {
 
 export default function App() {
   const { authenticated } = useLoaderData<LoaderData>()
+  const { setAuthentication } = useStore()
+  useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+    setAuthentication(authenticated)
+  }, [authenticated, setAuthentication])
 
   return (
     <html lang="en">
@@ -184,7 +190,7 @@ export default function App() {
         >
           <AppShell
             padding="md"
-            header={<Header authenticated={authenticated} />}
+            header={<Header />}
             styles={theme => ({
               main: {
                 backgroundColor:

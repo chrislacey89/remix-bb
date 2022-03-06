@@ -14,8 +14,7 @@ import {
 } from '@mantine/core'
 import dayjs from 'dayjs'
 import duration from 'dayjs/plugin/duration'
-
-import houses from '../../data/houses'
+import { useStore } from '~/store/store'
 import { db } from '~/utils/db.server'
 dayjs.extend(duration)
 interface House {
@@ -54,6 +53,7 @@ export const loader: LoaderFunction = async ({ params }) => {
 }
 
 export default function Houses() {
+  const { authenticated } = useStore()
   const { picture, town, type, title, price, description, guests } =
     useLoaderData<LoaderData>()
   const [value, setValue] = useState<[Date | null, Date | null]>([null, null])
@@ -132,9 +132,15 @@ export default function Houses() {
             <p>
               ${(numberOfNightsBetweenDates * parseInt(price, 10)).toFixed(2)}
             </p>
-            <Button color="red" fullWidth>
-              Reserve
-            </Button>
+            {authenticated ? (
+              <Button color="red" fullWidth>
+                Reserve
+              </Button>
+            ) : (
+              <Button color="red" fullWidth>
+                Log in to reserve
+              </Button>
+            )}
           </div>
         )}
       </aside>

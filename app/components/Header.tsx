@@ -11,19 +11,16 @@ import {
 import Signup from './Signup'
 import Login from './Login'
 import HeaderNavProfile from './HeaderNavProfile'
+import { useStore } from '~/store/store'
 export async function action({ request }) {
   console.log('test')
   console.log('🚀 ~ file: Header.tsx ~ line 14 ~ request', request)
 }
 
-interface HeaderProps {
-  authenticated: boolean
-}
-
-export default function Header({ authenticated }: HeaderProps) {
+export default function Header() {
   const [signUpOpened, setSignUpOpened] = useState(false)
   const [loginOpened, setLoginOpened] = useState(false)
-
+  const { authenticated } = useStore()
   return (
     <>
       <Modal opened={signUpOpened} onClose={() => setSignUpOpened(false)}>
