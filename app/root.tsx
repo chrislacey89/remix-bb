@@ -152,23 +152,26 @@ export const action: ActionFunction = async ({ request }) => {
   }
 }
 
-type LoaderData = { authenticated: boolean }
+type LoaderData = { authenticated: boolean; userId: string | null }
 
 export const loader: LoaderFunction = async ({ request }) => {
   // todo: fix these 3 lines with proper auth check
   const userId = await getUserId(request)
   const loggedIn = userId !== null
 
-  return { authenticated: loggedIn }
+  return { authenticated: loggedIn, userId }
 }
 
 export default function App() {
-  const { authenticated } = useLoaderData<LoaderData>()
-  const { setAuthentication } = useStore()
+  const { authenticated, userId } = useLoaderData<LoaderData>()
+  const { setAuthentication, setUserId } = useStore()
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     setAuthentication(authenticated)
-  }, [authenticated, setAuthentication])
+    if (userId) {
+      setUserId(userId)
+    }
+  }, [authenticated, setAuthentication, userId, setUserId])
 
   return (
     <html lang="en">

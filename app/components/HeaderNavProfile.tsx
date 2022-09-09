@@ -13,15 +13,13 @@ import {
 import Signup from './Signup'
 import Login from './Login'
 import NavProfileIcon from './NavProfileIcon'
+import { useStore } from '~/store/store'
 interface HeaderNavProps {
   authenticated: boolean
 }
 
 export default function HeaderNavProfile({ authenticated }: HeaderNavProps) {
-  console.log(
-    '🚀 ~ file: HeaderNavProfile.tsx ~ line 21 ~ authenticated',
-    authenticated,
-  )
+  const { userId } = useStore()
   const [signUpOpened, setSignUpOpened] = useState(false)
   const [loginOpened, setLoginOpened] = useState(false)
   // todo: update form ref type
@@ -88,6 +86,12 @@ export default function HeaderNavProfile({ authenticated }: HeaderNavProps) {
         </nav>
       }
     >
+      <MenuItem>
+        <Link className="link" to={`account/${userId}`}>
+          My Account
+        </Link>
+      </MenuItem>
+
       <MenuItem onClick={() => formRef.current.requestSubmit()}>
         <Form ref={formRef} method="post" name="logout" id="logoutForm">
           <input type="hidden" name="loginType" value="logout" />

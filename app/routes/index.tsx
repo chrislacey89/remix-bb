@@ -28,7 +28,7 @@ type LoaderData = HouseType[]
 
 export default function Index() {
   const houses = useLoaderData<LoaderData>()
-  console.log('🚀 ~ file: index.tsx ~ line 49 ~ houses', houses)
+
   return (
     <div className="container">
       <h2>Places to stay</h2>
